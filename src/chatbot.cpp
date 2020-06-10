@@ -45,6 +45,63 @@ ChatBot::~ChatBot()
 //// STUDENT CODE
 ////
 
+ChatBot::ChatBot(const ChatBot &source) {
+    _chatLogic = source._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
+    _rootNode = source._rootNode;
+    _image = new wxBitmap(*source._image);
+}
+
+ChatBot &ChatBot::operator=(const ChatBot &source) {
+    if (this != &source) {
+        delete _image;
+
+        _chatLogic = source._chatLogic;
+        _chatLogic->SetChatbotHandle(this);
+        _rootNode = source._rootNode;
+        _image = new wxBitmap(*source._image);
+    }
+
+    return *this;
+}
+
+ChatBot::ChatBot(ChatBot &&source) {
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
+    _image = source._image;
+
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+    source._currentNode = nullptr;
+    source._image = nullptr;
+
+    _chatLogic->SetChatbotHandle(this);
+}
+
+ChatBot &ChatBot::operator=(ChatBot &&source) {
+    if (this != &source) {
+
+        if (_image != nullptr) {
+            delete _image;
+        }
+
+        _chatLogic = source._chatLogic;
+        _rootNode = source._rootNode;
+        _currentNode = source._currentNode;
+        _image = source._image;
+
+        source._chatLogic = nullptr;
+        source._rootNode = nullptr;
+        source._currentNode = nullptr;
+        source._image = nullptr;
+
+        _chatLogic->SetChatbotHandle(this);
+    }
+
+    return *this;
+}
+
 ////
 //// EOF STUDENT CODE
 
